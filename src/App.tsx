@@ -5,9 +5,12 @@ import './style/introjs-flattener.scss';
 import { Controller } from './Controller';
 import { defaultMatchProfile, MatchMode, MatchProfile } from './Match';
 import { useWindowSize } from './Util';
+import useWebSocket from 'react-use-websocket';
 import { CountdownTimer, TimerStatus } from './Timer';
 import { SoundManager } from './SoundManager';
 import introJs from 'intro.js';
+
+const wsURL = 'ws://127.0.0.1:8080'
 
 let appInited = 0; // HACK: to prevent multiple inits in development mode
 
@@ -42,6 +45,20 @@ function App() {
     const soundManager = useMemo(() => new SoundManager(), []);
 
     const windowSize = useWindowSize();
+
+    useWebSocket(wsURL, {
+
+        onOpen: () => {
+            console.log('WebSocket connection established.');
+        },
+
+        onMessage: async (event) => {
+            const matchMode: MatchMode = event.data;
+            console.log(event.data)
+            await sendControllersMatchMode(matchMode);
+        }
+ 
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useMemo(() => profiles[4] = JSON.parse(localStorage.getItem("custom-profile") || JSON.stringify(profiles[4])), []);
