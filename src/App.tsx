@@ -10,7 +10,7 @@ import { CountdownTimer, TimerStatus } from './Timer';
 import { SoundManager } from './SoundManager';
 import introJs from 'intro.js';
 
-const wsURL = 'ws://127.0.0.1:8080'
+const wsURL = 'ws://192.168.1.30:8080'
 
 let appInited = 0; // HACK: to prevent multiple inits in development mode
 
